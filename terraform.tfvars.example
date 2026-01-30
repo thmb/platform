@@ -1,0 +1,20 @@
+# AWS Configuration
+aws_region    = "sa-east-1"
+instance_type = "t3a.large"
+disk_size     = 32
+
+# SSH Configuration
+ssh_cidrs       = ["0.0.0.0/0"]
+ssh_public_key  = "ssh-ed25519 <public-key-content-here>"
+ssh_private_key = <<-EOT
+-----BEGIN OPENSSH PRIVATE KEY-----
+<private-key-content-here>
+-----END OPENSSH PRIVATE KEY-----
+EOT
+
+# Cloudflare Configuration
+cloudflare_token = "<cloudflare-api-token-here>"
+
+# GitHub Secrets
+github_token = "<github-personal-access-token-here>"
+

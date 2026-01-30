@@ -1,0 +1,19 @@
+# K3S Server Configuration (remote access via token + certificate)
+
+tls-san:
+  - "127.0.0.1"
+  - "localhost"
+
+write-kubeconfig-mode: "0644" # readable by all users
+
+write-kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+
+cluster-init: true
+
+# disable:
+#   - traefik
+#   - servicelb
+#   - local-storage
+
+kube-apiserver-arg:
+  - "anonymous-auth=true" # Allow unauthenticated discovery API

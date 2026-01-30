@@ -1,0 +1,60 @@
+name: AWS, Cloudflare and GitHub Provision
+
+on:
+  # push:
+  #   branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: "platform" # one concurrent
+  cancel-in-progress: false
+
+jobs:
+  validate-plan-apply:
+    name: Validate > Plan > Apply
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.14.4"
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        env:
+          TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
+          TF_VAR_ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
+          TF_VAR_github_token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        run: terraform plan -no-color -out=tfplan
+
+      - name: Terraform Apply
+        env:
+          TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
+          TF_VAR_ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
+          TF_VAR_github_token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        run: terraform apply -auto-approve tfplan
