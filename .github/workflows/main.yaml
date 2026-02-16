@@ -13,6 +13,11 @@ jobs:
   validate-plan-apply:
     name: Validate > Plan > Apply
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
+      TF_VAR_ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
+      TF_VAR_github_token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
 
     defaults:
       run:
@@ -44,17 +49,8 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        env:
-          TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
-          TF_VAR_ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
-          TF_VAR_github_token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
         run: terraform plan -no-color -out=tfplan
 
       - name: Terraform Apply
-        env:
-          TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
-          TF_VAR_ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          TF_VAR_cloudflare_token: ${{ secrets.CLOUDFLARE_TOKEN }}
-          TF_VAR_github_token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        id: apply
         run: terraform apply -auto-approve tfplan
