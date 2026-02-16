@@ -11,12 +11,12 @@ terraform {
   required_providers {
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = ">= 1.60.0"
+      version = "1.60.1"
     }
   }
 }
 
 
 provider "hcloud" {
-  token = var.api_token # HCLOUD_TOKEN
+  token = var.hetzner_api_token # HCLOUD_TOKEN
 }
