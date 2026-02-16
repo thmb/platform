@@ -21,7 +21,7 @@ resource "aws_security_group" "cluster" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = var.ssh_cidr_blocks
+    cidr_blocks = var.cidr_blocks
   }
 
   ingress {
@@ -45,7 +45,7 @@ resource "aws_security_group" "cluster" {
     from_port   = 6443
     to_port     = 6443
     protocol    = "tcp"
-    cidr_blocks = var.ssh_cidr_blocks
+    cidr_blocks = var.cidr_blocks
   }
 
   egress {

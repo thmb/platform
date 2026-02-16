@@ -18,12 +18,6 @@ terraform {
 
 
 provider "aws" {
-  region = var.aws_region
-
-  default_tags {
-    tags = {
-      Project   = "platform"
-      ManagedBy = "terraform"
-    }
-  }
+  # Authenticates via AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables
+  region = var.default_location
 }

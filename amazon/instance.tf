@@ -1,10 +1,10 @@
-data "aws_ami" "debian" {
+data "aws_ami" "system" {
   most_recent = true
   owners      = ["amazon"]
 
   filter {
     name   = "name"
-    values = ["debian-13-backports-*"]
+    values = ["${var.system_image}*"]
   }
 
   filter {
@@ -35,8 +35,7 @@ data "cloudinit_config" "cluster" {
       ]
 
       runcmd = [
-        "LATEST=$(curl -s https://api.github.com/repos/k3s-io/k3s/releases/latest | sed -n 's/.*\"tag_name\": \"\\([^\"]*\\)\".*/\\1/p')",
-        "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=$LATEST sh -s - --write-kubeconfig-mode 644 --tls-san ${aws_eip.cluster.public_ip} --tls-san 127.0.0.1 --tls-san localhost",
+        "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${var.kubernetes_version} sh -s - --write-kubeconfig-mode 644 --tls-san ${aws_eip.cluster.public_ip}",
         "sleep 30",
         "k3s kubectl create serviceaccount terraform -n kube-system || true",
         "k3s kubectl create clusterrolebinding terraform-admin --clusterrole=cluster-admin --serviceaccount=kube-system:terraform || true"
@@ -59,7 +58,7 @@ resource "aws_key_pair" "cluster" {
 
 resource "aws_instance" "cluster" {
   instance_type = var.instance_type
-  ami           = data.aws_ami.debian.id
+  ami           = data.aws_ami.system.id
 
   key_name = aws_key_pair.cluster.key_name
 
@@ -72,7 +71,7 @@ resource "aws_instance" "cluster" {
 
   root_block_device {
     volume_type           = "gp3"
-    volume_size           = var.disk_size
+    volume_size           = 40
     delete_on_termination = true
     encrypted             = true
   }
@@ -102,10 +101,10 @@ resource "local_sensitive_file" "ssh_key" {
 }
 
 
-resource "null_resource" "wait_for_cluster" {
+resource "terraform_data" "wait_for_cluster" {
   depends_on = [aws_eip_association.cluster, local_sensitive_file.ssh_key]
 
-  triggers = { instance_id = aws_instance.cluster.id }
+  triggers_replace = [aws_instance.cluster.id]
 
   provisioner "local-exec" {
     command = <<-EOF
@@ -143,7 +142,7 @@ resource "null_resource" "wait_for_cluster" {
 }
 
 data "external" "cluster_config" {
-  depends_on = [null_resource.wait_for_cluster]
+  depends_on = [terraform_data.wait_for_cluster]
 
   program = ["bash", "-c", <<-EOF
     set -e

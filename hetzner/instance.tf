@@ -14,8 +14,7 @@ data "cloudinit_config" "cluster" {
       ]
 
       runcmd = [
-        "LATEST=$(curl -s https://api.github.com/repos/k3s-io/k3s/releases/latest | sed -n 's/.*\"tag_name\": \"\\([^\"]*\\)\".*/\\1/p')",
-        "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=$LATEST sh -s - --write-kubeconfig-mode 644 --tls-san ${hcloud_primary_ip.cluster.ip_address} --tls-san 127.0.0.1 --tls-san localhost",
+        "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=${var.kubernetes_version} sh -s - --write-kubeconfig-mode 644 --tls-san ${hcloud_primary_ip.cluster.ip_address}",
         "sleep 30",
         "k3s kubectl create serviceaccount terraform -n kube-system || true",
         "k3s kubectl create clusterrolebinding terraform-admin --clusterrole=cluster-admin --serviceaccount=kube-system:terraform || true"
@@ -38,9 +37,9 @@ resource "hcloud_ssh_key" "cluster" {
 
 resource "hcloud_server" "cluster" {
   name        = "${var.project_name}-cluster"
-  server_type = var.server_type
-  image       = var.image
-  location    = var.location
+  server_type = var.instance_type
+  image       = var.system_image
+  location    = var.default_location
 
   ssh_keys     = [hcloud_ssh_key.cluster.id]
   firewall_ids = [hcloud_firewall.cluster.id]

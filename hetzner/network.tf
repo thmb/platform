@@ -1,6 +1,6 @@
 resource "hcloud_primary_ip" "cluster" {
   name          = "${var.project_name}-ip"
-  location      = var.location
+  location      = var.default_location
   type          = "ipv4"
   assignee_type = "server"
   auto_delete   = false
@@ -20,7 +20,7 @@ resource "hcloud_firewall" "cluster" {
     direction   = "in"
     protocol    = "tcp"
     port        = "22"
-    source_ips  = var.ssh_cidr_blocks
+    source_ips  = var.cidr_blocks
   }
 
   rule {
@@ -44,7 +44,7 @@ resource "hcloud_firewall" "cluster" {
     direction   = "in"
     protocol    = "tcp"
     port        = "6443"
-    source_ips  = var.ssh_cidr_blocks
+    source_ips  = var.cidr_blocks
   }
 
   labels = {

@@ -1,4 +1,0 @@
-hetzner_api_token = ""
-ssh_public_key    = ""
-ssh_private_key   = ""
-# ssh_cidr_blocks = ["YOUR_IP/32", "::/0"]

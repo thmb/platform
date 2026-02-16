@@ -18,5 +18,5 @@ terraform {
 
 
 provider "hcloud" {
-  token = var.hetzner_api_token # HCLOUD_TOKEN
+  # Authenticates via HCLOUD_TOKEN environment variable
 }

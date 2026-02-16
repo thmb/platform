@@ -1,8 +1,3 @@
-output "server_id" {
-  description = "K3S server ID"
-  value       = hcloud_server.cluster.id
-}
-
 output "public_ip" {
   description = "Public IP address"
   value       = hcloud_primary_ip.cluster.ip_address

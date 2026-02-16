@@ -1,12 +1,12 @@
-variable "aws_region" {
-  description = "AWS region."
-  default     = "sa-east-1"
-  type        = string
-}
-
 variable "project_name" {
   description = "Project name."
   default     = "thmb"
+  type        = string
+}
+
+variable "default_location" {
+  description = "AWS region."
+  default     = "sa-east-1" # South America (São Paulo)
   type        = string
 }
 
@@ -16,14 +16,20 @@ variable "instance_type" {
   type        = string
 }
 
-variable "disk_size" {
-  description = "Disk size in GB."
-  default     = 32
-  type        = number
+variable "system_image" {
+  description = "OS image for the server."
+  default     = "debian-13-backports"
+  type        = string
 }
 
-variable "ssh_cidr_blocks" {
-  description = "CIDR blocks able to SSH into the instance."
+variable "kubernetes_version" {
+  description = "K3S Kubernetes version."
+  default     = "v1.35.1+k3s1"
+  type        = string
+}
+
+variable "cidr_blocks" {
+  description = "CIDR blocks allowed to access SSH and K3S API."
   default     = ["0.0.0.0/0"]
   type        = list(string)
 }
