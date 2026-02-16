@@ -1,45 +1,32 @@
-locals {
-  release_name = "cnpg"
-}
+resource "kubernetes_namespace_v1" "database" {
+  count = var.install_database_operator ? 1 : 0
 
-
-# ==============================================================================
-# NAMESPACE
-# ==============================================================================
-
-resource "kubernetes_namespace_v1" "cnpg" {
   metadata {
-    name = var.kubernetes_namespace
-    labels = {
-      name = var.kubernetes_namespace
-    }
+    name = "database-system"
   }
 }
 
-# ==============================================================================
-# HELM RELEASE
-# ==============================================================================
 
-resource "helm_release" "cnpg" {
-  name       = local.release_name
-  namespace  = kubernetes_namespace_v1.cnpg.metadata[0].name
+resource "helm_release" "database" {
+  count = var.install_database_operator ? 1 : 0
+
+  name             = "database-operator"
+  namespace        = kubernetes_namespace_v1.database[0].metadata[0].name
+  create_namespace = false
+
   repository = "https://cloudnative-pg.github.io/charts"
   chart      = "cloudnative-pg"
-  version    = var.chart_version
+  version    = var.database_chart_version
 
-  create_namespace = false
+  timeout = 300
+  atomic  = true
+
 
   values = [
     yamlencode({
-      image = {
-        repository = var.image_repository
-        tag        = var.image_tag
-      }
       crds = {
         create = true
       }
     })
   ]
-
-  depends_on = [kubernetes_namespace_v1.cnpg]
 }

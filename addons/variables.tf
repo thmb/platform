@@ -7,6 +7,7 @@ variable "kubernetes_host" {
 variable "kubernetes_token" {
   description = "Kubernetes API server token."
   nullable    = false
+  sensitive   = true
   type        = string
 }
 
@@ -20,13 +21,19 @@ variable "kubernetes_certificate" {
 # CERTIFICATE MANAGER
 # ==============================================================================
 
+variable "install_certificate_manager" {
+  description = "Whether to install Cert-Manager."
+  default     = true
+  type        = bool
+}
+
 variable "certificate_chart_version" {
   description = "Cert-Manager Helm chart version."
-  default     = "v1.19.2"
+  default     = "v1.19.3"
   type        = string
 }
 
-variable "certificate_email" {
+variable "certificate_issuer_email" {
   description = "Cert-Manager email address."
   default     = "admin@thau.tech"
   type        = string
@@ -36,27 +43,15 @@ variable "certificate_email" {
 # DATABASE OPERATOR
 # ==============================================================================
 
-variable "database_namespace" {
-  description = "Kubernetes namespace for CNPG operator."
-  default     = "cnpg-system"
-  type        = string
+variable "install_database_operator" {
+  description = "Whether to install CNPG operator."
+  default     = true
+  type        = bool
 }
 
-variable "database_image" {
-  description = "CNPG operator image repository."
-  default     = "ghcr.io/cloudnative-pg/cloudnative-pg"
-  type        = string
-}
-
-variable "database_tag" {
-  description = "CNPG operator image tag."
-  default     = "1.28.0"
-  type        = string
-}
-
-variable "database_chart" {
-  description = "CloudNativePG Helm chart version."
-  default     = "0.27.0"
+variable "database_chart_version" {
+  description = "CloudNativePG operator Helm chart version."
+  default     = "0.27.1"
   type        = string
 }
 
@@ -64,20 +59,14 @@ variable "database_chart" {
 # OBJECTSTORE OPERATOR
 # ==============================================================================
 
-variable "objectstore_namespace" {
-  description = "Kubernetes namespace for SeaweedFS operator."
-  default     = "seaweedfs-operator"
-  type        = string
+variable "install_objectstore_operator" {
+  description = "Whether to install SeaweedFS operator."
+  default     = true
+  type        = bool
 }
 
 variable "objectstore_chart_version" {
   description = "SeaweedFS operator Helm chart version."
-  default     = "0.1.12"
+  default     = "0.1.13"
   type        = string
-}
-
-variable "objectstore_webhook_enabled" {
-  description = "Enable SeaweedFS operator webhooks. Note: Should be false initially due to cert issues."
-  default     = false
-  type        = bool
 }
