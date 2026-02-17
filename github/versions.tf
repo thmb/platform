@@ -25,6 +25,5 @@ terraform {
 }
 
 provider "github" {
-  token = var.access_token
-  owner = "<user-or-org-name>"
+  # Configured via GITHUB_TOKEN and GITHUB_OWNER environment variables
 }
