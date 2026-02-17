@@ -1,8 +1,8 @@
 name: AWS, Cloudflare and GitHub Provision
 
 on:
-  push:
-    branches: [main]
+  # push:
+  #   branches: [main]
   workflow_dispatch:
 
 concurrency:
