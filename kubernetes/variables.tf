@@ -18,7 +18,7 @@ variable "kubernetes_certificate" {
 }
 
 # ==============================================================================
-# CERTIFICATE MANAGER
+# CERT MANAGER
 # ==============================================================================
 
 variable "install_cert_manager" {
@@ -34,7 +34,7 @@ variable "cert_manager_email" {
 }
 
 # ==============================================================================
-# POSTGRESQL OPERATOR
+# CNPG OPERATOR
 # ==============================================================================
 
 variable "install_cnpg_operator" {
@@ -44,7 +44,7 @@ variable "install_cnpg_operator" {
 }
 
 # ==============================================================================
-# STORAGE OPERATOR
+# CEPH OPERATOR
 # ==============================================================================
 
 variable "install_ceph_operator" {

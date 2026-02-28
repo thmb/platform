@@ -76,7 +76,7 @@ resource "terraform_data" "cert_manager_ready" {
 }
 
 
-resource "kubernetes_manifest" "certificate" {
+resource "kubernetes_manifest" "cert_manager_issuer" {
   count = var.install_cert_manager ? 1 : 0
 
   manifest = {
