@@ -21,13 +21,13 @@ variable "kubernetes_certificate" {
 # CERTIFICATE MANAGER
 # ==============================================================================
 
-variable "install_certificate_manager" {
+variable "install_cert_manager" {
   description = "Whether to install Cert-Manager."
   default     = true
   type        = bool
 }
 
-variable "certificate_issuer_email" {
+variable "cert_manager_email" {
   description = "Cert-Manager email address."
   default     = "admin@thau.tech"
   type        = string
@@ -37,7 +37,7 @@ variable "certificate_issuer_email" {
 # POSTGRESQL OPERATOR
 # ==============================================================================
 
-variable "install_database_operator" {
+variable "install_cnpg_operator" {
   description = "Whether to install CNPG operator."
   default     = true
   type        = bool
@@ -47,7 +47,7 @@ variable "install_database_operator" {
 # STORAGE OPERATOR
 # ==============================================================================
 
-variable "install_objectstore_operator" {
+variable "install_ceph_operator" {
   description = "Whether to install Rook-Ceph operator."
   default     = true
   type        = bool
