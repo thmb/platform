@@ -16,11 +16,10 @@ resource "helm_release" "database" {
 
   repository = "https://cloudnative-pg.github.io/charts"
   chart      = "cloudnative-pg"
-  version    = var.database_chart_version
+  version    = "0.27.1"
 
   timeout = 300
   atomic  = true
-
 
   values = [
     yamlencode({

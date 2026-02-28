@@ -16,7 +16,7 @@ resource "helm_release" "certificate" {
 
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
-  version    = var.certificate_chart_version
+  version    = "v1.19.3"
 
   timeout = 300
   atomic  = true
