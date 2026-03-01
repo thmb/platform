@@ -7,9 +7,9 @@ All three addons are defined in `addons.tf` and can be toggled independently.
 
 | Addon | Chart | Namespace | Purpose |
 |-------|-------|-----------|---------|
-| **cert-manager** | `jetstack/cert-manager v1.19.3` | `cert-manager` | TLS certificate automation via Let's Encrypt |
-| **CloudNativePG** | `cnpg/cloudnative-pg v0.27.1` | `cnpg-operator` | PostgreSQL operator |
-| **Rook-Ceph** | `rook-release/rook-ceph v1.19.2` | `ceph-operator` | Ceph storage operator (block, filesystem, object) |
+| **Cert-Manager** | `jetstack/cert-manager v1.19.3` | `cert-manager` | TLS certificate automation via Let's Encrypt |
+| **CloudNativePG** | `cnpg/cloudnative-pg v0.27.1` | `cnpg-operator` | PostgreSQL Cloud Native operator |
+| **Rook-Ceph** | `rook-release/rook-ceph v1.19.2` | `rook-operator` | Ceph storage operator (block, filesystem, object) |
 
 ## Architecture
 
@@ -54,14 +54,14 @@ terraform apply \
 | `install_cert_manager` | Deploy cert-manager + ClusterIssuer | `true` |
 | `cert_manager_email` | Let's Encrypt account email | `admin@thau.tech` |
 | `install_cnpg_operator` | Deploy CloudNativePG operator | `true` |
-| `install_ceph_operator` | Deploy Rook-Ceph operator | `true` |
+| `install_rook_operator` | Deploy Rook-Ceph operator | `true` |
 
 ## Verify
 
 ```bash
 kubectl get pods -n cert-manager
 kubectl get pods -n cnpg-operator
-kubectl get pods -n ceph-operator
+kubectl get pods -n rook-operator
 kubectl get clusterissuer letsencrypt
 ```
 

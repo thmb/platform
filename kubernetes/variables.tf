@@ -18,7 +18,7 @@ variable "kubernetes_certificate" {
 }
 
 # ==============================================================================
-# CERT MANAGER
+# CERT MANAGER (LETSENCRYPT)
 # ==============================================================================
 
 variable "install_cert_manager" {
@@ -34,20 +34,20 @@ variable "cert_manager_email" {
 }
 
 # ==============================================================================
-# CNPG OPERATOR
+# CLOUD NATIVE POSTGRESQL OPERATOR
 # ==============================================================================
 
 variable "install_cnpg_operator" {
-  description = "Whether to install CNPG operator."
+  description = "Whether to install Cloud Native PostgreSQL operator."
   default     = true
   type        = bool
 }
 
 # ==============================================================================
-# CEPH OPERATOR
+# ROOK-CEPH OPERATOR
 # ==============================================================================
 
-variable "install_ceph_operator" {
+variable "install_rook_operator" {
   description = "Whether to install Rook-Ceph operator."
   default     = true
   type        = bool

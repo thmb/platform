@@ -12,7 +12,7 @@ resource "kubernetes_namespace_v1" "cert_manager" {
 resource "helm_release" "cert_manager" {
   count = var.install_cert_manager ? 1 : 0
 
-  name             = "cert"
+  name             = "cert-manager"
   namespace        = kubernetes_namespace_v1.cert_manager[0].metadata[0].name
   create_namespace = false
 
@@ -59,8 +59,8 @@ resource "terraform_data" "cert_manager_ready" {
       i=0
       while [ $i -lt 30 ]; do
         i=$((i + 1))
-        if kubectl get deployment certificate-manager-cert-manager-webhook \
-          -n ${kubernetes_namespace_v1.certificate[0].metadata[0].name} \
+        if kubectl get deployment ${helm_release.cert_manager[0].name}-cert-manager-webhook \
+          -n ${kubernetes_namespace_v1.cert_manager[0].metadata[0].name} \
           -o jsonpath='{.status.availableReplicas}' 2>/dev/null | grep -q '1'; then
           echo "cert-manager webhook ready"
           exit 0
@@ -119,7 +119,7 @@ resource "kubernetes_namespace_v1" "cnpg_operator" {
 resource "helm_release" "cnpg_operator" {
   count = var.install_cnpg_operator ? 1 : 0
 
-  name             = "cnpg"
+  name             = "cloudnative-pg"
   namespace        = kubernetes_namespace_v1.cnpg_operator[0].metadata[0].name
   create_namespace = false
 
@@ -142,18 +142,18 @@ resource "helm_release" "cnpg_operator" {
 # ROOK-CEPH OPERATOR
 # ==============================================================================
 
-resource "kubernetes_namespace_v1" "ceph_operator" {
-  count = var.install_ceph_operator ? 1 : 0
+resource "kubernetes_namespace_v1" "rook_operator" {
+  count = var.install_rook_operator ? 1 : 0
 
-  metadata { name = "ceph-operator" }
+  metadata { name = "rook-operator" }
 }
 
 
-resource "helm_release" "ceph_operator" {
-  count = var.install_ceph_operator ? 1 : 0
+resource "helm_release" "rook_operator" {
+  count = var.install_rook_operator ? 1 : 0
 
-  name             = "ceph"
-  namespace        = kubernetes_namespace_v1.ceph_operator[0].metadata[0].name
+  name             = "rook-ceph"
+  namespace        = kubernetes_namespace_v1.rook_operator[0].metadata[0].name
   create_namespace = false
 
   repository = "https://charts.rook.io/release"
