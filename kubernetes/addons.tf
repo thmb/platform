@@ -106,7 +106,7 @@ resource "kubernetes_manifest" "cert_manager_issuer" {
 
 
 # ==============================================================================
-# CNPG OPERATOR
+# CLOUD NATIVE POSTGRESQL OPERATOR
 # ==============================================================================
 
 resource "kubernetes_namespace_v1" "cnpg_operator" {
